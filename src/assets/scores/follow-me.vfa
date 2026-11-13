@@ -1,5 +1,19 @@
 ;; @version 0.1.0-alpha
 
+;          Welcome to the Voxalfa Playground
+;          ---------------------------------
+;
+;  Docs    https://voxalfa.github.io/documentation/
+;
+;  Shortcuts
+;    - F1            Command palette
+;    - Ctrl+Shift+I  Format file
+;    - Ctrl+Shift+R  Refactor
+;
+;  Use the button on the navbar to toggle the preview
+;
+;  NOTE: Custom fonts do not work in the browser
+
 [#] title="Follow me"
 [#] author="Daniel Batchellor"
 [#] description="A sample song from the Tonic Sol-Fa music course for schools."

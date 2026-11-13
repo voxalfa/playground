@@ -3,7 +3,10 @@ import { Midi } from "@tonejs/midi";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 function usePlayback(source: Uint8Array | null) {
-  const midi = useMemo(() => new Midi(source), [source]);
+  const midi = useMemo(
+    () => (source === null ? null : new Midi(source)),
+    [source],
+  );
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const synth = useRef<Tone.PolySynth | null>(null);

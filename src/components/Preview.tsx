@@ -8,9 +8,11 @@ import {
   ZoomOut,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import * as Slider from "@radix-ui/react-slider";
 import { useDiagnostics } from "../hooks/useDiagnostics";
 import { usePlayback } from "../hooks/usePlayback";
 import { PreviewErrorView } from "./PreviewErrorView";
+import { DownloadMenu } from "./DownloadMenu";
 import { createMIDI, renderSVG } from "voxalfa-lib";
 
 const ZOOM_MIN = 0.5;
@@ -122,19 +124,25 @@ function Preview(props: {
           </button>
         </div>
 
-        <input
-          type="range"
+        <Slider.Root
+          className="relative flex h-4 min-w-0 flex-1 items-center data-[disabled]:opacity-40"
           min={0}
-          max={playback.duration}
+          max={Math.max(playback.duration, 0.01)}
           step={0.1}
-          value={Math.min(playback.position, playback.duration)}
-          onChange={(event) => playback.seek(Number(event.target.value))}
+          value={[Math.min(playback.position, playback.duration)]}
+          onValueChange={([value]) => playback.seek(value)}
           disabled={playback.duration === 0}
-          aria-label="Seek"
-          className="h-1 min-w-0 flex-1 accent-accent disabled:opacity-40"
-        />
+        >
+          <Slider.Track className="relative h-1 grow rounded-full bg-border">
+            <Slider.Range className="absolute h-full rounded-full bg-accent" />
+          </Slider.Track>
+          <Slider.Thumb
+            aria-label="Seek"
+            className="block h-3 w-3 rounded-full bg-accent"
+          />
+        </Slider.Root>
 
-        <span className="shrink-0 text-[11px] tabular-nums text-muted">
+        <span className="shrink-0 text-xs tabular-nums text-muted">
           {formatTime(playback.position)} / {formatTime(playback.duration)}
         </span>
 
@@ -180,6 +188,8 @@ function Preview(props: {
               <Play className="h-4 w-4" />
             )}
           </button>
+
+          <DownloadMenu midi={midi} svgPages={svgPages} page={page} />
         </div>
       </div>
     </aside>
