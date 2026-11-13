@@ -22,8 +22,8 @@ const palettes = {
     border: "#262626",
     foreground: "#bfbdb6",
     muted: "#6e6e6e",
-    accent: "#ff8f40",
-    string: "#59c2ff",
+    accent: "#c18639",
+    string: "#6f9fbf",
   },
 };
 

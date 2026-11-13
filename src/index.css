@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Color are derived from "Rust" and "Ayu" theme from mdBook
+ * Colors are derived from "Rust" and "Ayu" theme from mdBook
  */
 @theme {
   --color-background: #e1e1db;
@@ -22,7 +22,19 @@
   --color-border: #262626;
   --color-foreground: #bfbdb6;
   --color-muted: #6e6e6e;
-  --color-accent: #ff8f40;
+  --color-accent: #c18639;
 
   color-scheme: dark;
+}
+
+@layer base {
+  [data-theme] {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .icon-button {
+    @apply cursor-pointer grid h-7 w-7 place-items-center rounded text-muted hover:text-accent disabled:pointer-events-none disabled:opacity-40;
+  }
 }

@@ -12,6 +12,9 @@ import {
   LcWorker,
   type LanguageClientConfig,
 } from "monaco-languageclient/lcwrapper";
+import Preview from "./components/Preview";
+import defaultText from "./assets/scores/follow-me.vfa?raw";
+import init from "voxalfa-lib";
 
 const vscodeApiConfig: MonacoVscodeApiConfig = {
   $type: "classic",
@@ -37,6 +40,15 @@ const languageClientConfig: LanguageClientConfig = {
 function App() {
   const { mode } = useTheme();
   const [apiReady, setApiReady] = useState(false);
+  const [editorText, setEditorText] = useState(defaultText);
+  const [showPreview, setShowPreview] = useState(true);
+  const [wasmLoaded, setWasmLoaded] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => setWasmLoaded(true))
+      .catch((error) => console.error("Failed to load WASM module", error));
+  }, []);
 
   useEffect(() => {
     if (apiReady) {
@@ -52,16 +64,32 @@ function App() {
 
   return (
     <div data-theme={mode} className="flex h-screen flex-col bg-background">
-      <Navbar />
-      <div className="min-h-0 flex-1">
-        <MonacoEditorReactComp
-          vscodeApiConfig={vscodeApiConfig}
-          editorAppConfig={editorAppConfig}
-          languageClientConfig={languageClientConfig}
-          style={{ height: "100%" }}
-          onVscodeApiInitDone={handleApiInit}
-          onError={(err) => console.error("Monaco error:", err)}
-        />
+      <Navbar onPreviewToggle={() => setShowPreview((prev) => !prev)} />
+
+      <div className="relative flex min-h-0 flex-1">
+        <div className="min-w-0 flex-1">
+          <MonacoEditorReactComp
+            vscodeApiConfig={vscodeApiConfig}
+            editorAppConfig={editorAppConfig}
+            languageClientConfig={languageClientConfig}
+            style={{ height: "100%", width: "100%" }}
+            onVscodeApiInitDone={handleApiInit}
+            onTextChanged={(event) => {
+              if (event.modified !== undefined) {
+                setEditorText(event.modified);
+              }
+            }}
+            onError={(err) => console.error("Monaco error:", err)}
+          />
+        </div>
+
+        {showPreview && (
+          <Preview
+            editorText={editorText}
+            wasmLoaded={wasmLoaded}
+            apiReady={apiReady}
+          />
+        )}
       </div>
     </div>
   );

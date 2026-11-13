@@ -1,11 +1,13 @@
 import type { EditorAppConfig } from "monaco-languageclient/editorApp";
 import sampleFile from "../assets/scores/follow-me.vfa?raw";
 
+export const FILE_URI = "/workspace/score.vfa";
+
 const editorAppConfig: EditorAppConfig = {
   codeResources: {
     modified: {
       text: sampleFile,
-      uri: "/workspace/score.vfa",
+      uri: FILE_URI,
     },
   },
   editorOptions: {
