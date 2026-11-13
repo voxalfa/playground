@@ -11,8 +11,7 @@
     "submodule:init": "git submodule update --init --recursive",
     "build:wasm-lsp": "wasm-pack build ./submodules/voxalfa/voxalfa-lsp/ --target web --out-dir=../../../wasm/voxalfa-lsp",
     "build:wasm-lib": "wasm-pack build ./submodules/voxalfa/voxalfa-wasm/ --target web --out-dir=../../../wasm/voxalfa-lib",
-    "build:wasm": "npm run build:wasm-lsp && npm run build:wasm-lib",
-    "prepare": "npm run submodule:init && npm run build:wasm"
+    "build:wasm": "npm run build:wasm-lsp && npm run build:wasm-lib"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.5",
