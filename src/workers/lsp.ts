@@ -5,7 +5,7 @@ const pendingMessages: unknown[] = [];
 
 const handleMessage = (data: unknown) => {
   // console.log("received message", data);
-  transport.process(JSON.stringify(data));
+  transport?.process(JSON.stringify(data));
 };
 
 self.onmessage = (event: MessageEvent) => {
