@@ -1,32 +1,37 @@
-# React + TypeScript + Vite
+# Playground
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**[Try it now →](https://voxalfa.github.io/playground/)**
 
-Currently, two official plugins are available:
+The Voxalfa playground is built on top of the [Monaco](https://microsoft.github.io/monaco-editor/) editor, the same engine behind VS Code. It integrates the official LSP through WebAssembly workers via [monaco-languageclient](https://github.com/TypeFox/monaco-languageclient/), so it has almost every feature the native LSP provides.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+<br/>
 
-## React Compiler
+<div align="center">
+    <img width="700" alt="Screenshot" src="https://github.com/user-attachments/assets/8ea88318-afe2-445e-bb89-00bd0f4df14e" />
+</div>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the Oxlint configuration
+- Full LSP support (diagnostics, completion, hover, formatting, ...) running locally in the browser
+- Syntax highlighting powered by Monaco
+- Live score preview
+- MIDI and SVG export
+- Everything runs client-side via WebAssembly
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Limitations
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- Custom fonts and PDFs are not supported in the playground.
+- IME input on mobile are not supported by Monaco.
+
+## Development
+
+```bash
+npm run submodule:init
+npm run build:wasm
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## License
+
+See [LICENSE](LICENSE).
