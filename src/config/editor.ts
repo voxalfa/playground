@@ -134,15 +134,6 @@ const editorAppConfig: EditorAppConfig = {
         ],
       },
     },
-    theme: {
-      name: "voxalfa-dark",
-      data: {
-        base: "vs-dark",
-        inherit: true,
-        rules: [],
-        colors: {},
-      },
-    },
   },
 };
 

@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+/*
+ * Color are derived from "Rust" and "Ayu" theme from mdBook
+ */
+@theme {
+  --color-background: #e1e1db;
+  --color-surface: #d8d8d2;
+  --color-border: #c1c1bb;
+  --color-foreground: #262625;
+  --color-muted: #6e6b5e;
+  --color-accent: #8c391f;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --color-background: #141414;
+  --color-surface: #1a1a1a;
+  --color-border: #262626;
+  --color-foreground: #bfbdb6;
+  --color-muted: #6e6e6e;
+  --color-accent: #ff8f40;
+
+  color-scheme: dark;
+}
