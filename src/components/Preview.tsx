@@ -59,7 +59,8 @@ function Preview(props: {
     }
   }, [svgPages, page]);
 
-  const isRendering = props.wasmLoaded && svgPages === null;
+  const isRendering =
+    props.wasmLoaded && errors.length === 0 && svgPages === null;
 
   return (
     <aside className="flex h-full w-[40%] shrink-0 flex-col border-l border-border bg-surface max-md:absolute max-md:inset-0 max-md:z-20 max-md:w-full">
