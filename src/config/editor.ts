@@ -3,6 +3,18 @@ import sampleFile from "../assets/scores/follow-me.vfa?raw";
 
 export const FILE_URI = "/workspace/score.vfa";
 
+export const MOBILE_EDITOR_OPTIONS = {
+  fontSize: 13,
+  lineNumbersMinChars: 3,
+  lineDecorationsWidth: 4,
+};
+
+export const DESKTOP_EDITOR_OPTIONS = {
+  fontSize: 15,
+  lineNumbersMinChars: 5,
+  lineDecorationsWidth: 10,
+};
+
 const editorAppConfig: EditorAppConfig = {
   codeResources: {
     modified: {

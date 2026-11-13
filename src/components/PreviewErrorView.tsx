@@ -1,5 +1,5 @@
 import { TriangleAlert } from "lucide-react";
-import type { PreviewError } from "../hooks/diagnostics";
+import type { PreviewError } from "../hooks/useDiagnostics";
 
 interface PreviewErrorViewProps {
   title: string;
@@ -18,35 +18,28 @@ function PreviewErrorView({ title, errors }: PreviewErrorViewProps) {
           </p>
 
           <ul className="space-y-1.5 text-left text-xs leading-relaxed">
-            {errors.map((error, index) => {
-              const hasPosition =
-                error.line !== undefined && error.column !== undefined;
+            {errors.map((error, index) => (
+              <li
+                key={`${index}-${error.message}`}
+                className="flex items-start gap-2 text-muted"
+              >
+                <span
+                  aria-hidden="true"
+                  className="mt-1.5 size-1 shrink-0 rounded-full bg-muted"
+                />
 
-              return (
-                <li
-                  key={`${index}-${error.message}`}
-                  className="flex items-start gap-2 text-muted"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="mt-1.5 size-1 shrink-0 rounded-full bg-muted"
-                  />
-
-                  <span className="min-w-0 flex-1 break-words">
-                    {error.message}
-                    {hasPosition && (
-                      <span className="font-medium text-foreground">
-                        {" "}
-                        (Line {error.line}, Column {error.column})
-                      </span>
-                    )}
-                    <span className="text-accent">
-                      {error.code !== undefined && ` [${error.code}]`}
-                    </span>
+                <span className="min-w-0 flex-1 break-words">
+                  {error.message}
+                  <span className="font-medium text-foreground">
+                    {" "}
+                    (Line {error.line}, Column {error.column})
                   </span>
-                </li>
-              );
-            })}
+                  <span className="text-accent">
+                    {error.code !== undefined && ` [${error.code}]`}
+                  </span>
+                </span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

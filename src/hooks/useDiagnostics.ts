@@ -3,10 +3,10 @@ import * as vscode from "vscode";
 import { FILE_URI } from "../config/editor";
 
 export interface PreviewError {
-  line?: number;
-  column?: number;
-  code?: string;
+  line: number;
+  column: number;
   message: string;
+  code?: string;
 }
 
 interface DiagnosticsSnapshot {

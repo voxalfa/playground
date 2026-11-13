@@ -1,12 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { editor } from "@codingame/monaco-vscode-editor-api";
 import lspWorkerUrl from "./workers/lsp?worker&url";
 import type { MonacoVscodeApiConfig } from "monaco-languageclient/vscodeApiWrapper";
 import { MonacoEditorReactComp } from "@typefox/monaco-editor-react";
 import { LogLevel } from "vscode";
-import { editorAppConfig } from "./config/editor";
+import {
+  DESKTOP_EDITOR_OPTIONS,
+  editorAppConfig,
+  MOBILE_EDITOR_OPTIONS,
+} from "./config/editor";
 import { themes, themeName } from "./config/theme";
 import { useTheme } from "./context/theme";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 import { Navbar } from "./components/Navbar";
 import {
   LcWorker,
@@ -15,6 +20,7 @@ import {
 import Preview from "./components/Preview";
 import defaultText from "./assets/scores/follow-me.vfa?raw";
 import init from "voxalfa-lib";
+import type { EditorApp } from "monaco-languageclient/editorApp";
 
 const vscodeApiConfig: MonacoVscodeApiConfig = {
   $type: "classic",
@@ -39,10 +45,12 @@ const languageClientConfig: LanguageClientConfig = {
 
 function App() {
   const { mode } = useTheme();
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const [apiReady, setApiReady] = useState(false);
   const [editorText, setEditorText] = useState(defaultText);
-  const [showPreview, setShowPreview] = useState(true);
+  const [showPreview, setShowPreview] = useState(!isMobile);
   const [wasmLoaded, setWasmLoaded] = useState(false);
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
   useEffect(() => {
     init()
@@ -51,10 +59,26 @@ function App() {
   }, []);
 
   useEffect(() => {
+    editorRef.current?.updateOptions(
+      isMobile ? MOBILE_EDITOR_OPTIONS : DESKTOP_EDITOR_OPTIONS,
+    );
+  }, [isMobile]);
+
+  useEffect(() => {
     if (apiReady) {
       editor.setTheme(themeName(mode));
     }
   }, [apiReady, mode]);
+
+  const handleEditorSetup = (app?: EditorApp) => {
+    const instance = app?.getEditor();
+    if (instance) {
+      editorRef.current = instance;
+      instance.updateOptions(
+        isMobile ? MOBILE_EDITOR_OPTIONS : DESKTOP_EDITOR_OPTIONS,
+      );
+    }
+  };
 
   const handleApiInit = () => {
     editor.defineTheme(themeName("light"), themes.light);
@@ -74,6 +98,7 @@ function App() {
             languageClientConfig={languageClientConfig}
             style={{ height: "100%", width: "100%" }}
             onVscodeApiInitDone={handleApiInit}
+            onEditorStartDone={handleEditorSetup}
             onTextChanged={(event) => {
               if (event.modified !== undefined) {
                 setEditorText(event.modified);
