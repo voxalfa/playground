@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "submodule:init": "git submodule update --init --recursive",
+    "build:wasm-lsp": "wasm-pack build ./submodules/voxalfa/voxalfa-lsp/ --target web --out-dir=../../../wasm/voxalfa-lsp",
+    "build:wasm-lib": "wasm-pack build ./submodules/voxalfa/voxalfa-wasm/ --target web --out-dir=../../../wasm/voxalfa-lib",
+    "build:wasm": "npm run build:wasm-lsp && npm run build:wasm-lib",
+    "prepare": "npm run submodule:init && npm run build:wasm"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.5",
@@ -15,7 +20,9 @@
     "monaco-languageclient": "^11.0.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "tailwindcss": "^4.3.5"
+    "tailwindcss": "^4.3.5",
+    "voxalfa-lsp": "file:wasm/voxalfa-lsp",
+    "voxalfa-lib": "file:wasm/voxalfa-lib"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",

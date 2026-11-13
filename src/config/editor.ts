@@ -11,6 +11,9 @@ const editorAppConfig: EditorAppConfig = {
   editorOptions: {
     fontSize: 15,
     minimap: { enabled: false },
+    suggest: {
+      showWords: false,
+    },
   },
   languageDef: {
     languageExtensionConfig: {
