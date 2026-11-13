@@ -7,7 +7,7 @@ function Navbar(props: { onPreviewToggle: () => void }) {
   const Icon = mode === "dark" ? Sun : Moon;
 
   return (
-    <header className="flex h-14 gap-2.5 items-center justify-between border-b border-border bg-surface px-4">
+    <header className="flex py-3 px-4 gap-3 items-center justify-between border-b border-border bg-surface">
       <img src={logo} alt="Voxalfa" className="h-7 w-7 rounded-md" />
 
       <span className="font-serif text-xl leading-none tracking-tight text-foreground">
@@ -19,7 +19,7 @@ function Navbar(props: { onPreviewToggle: () => void }) {
         onClick={props.onPreviewToggle}
         title="Toggle sidebar"
         aria-label="Toggle sidebar"
-        className="ml-auto flex items-center justify-center text-muted hover:text-accent"
+        className="ml-auto icon-button"
       >
         <PanelRight className="h-4 w-4" />
       </button>
@@ -28,7 +28,7 @@ function Navbar(props: { onPreviewToggle: () => void }) {
         onClick={toggleMode}
         title="Toggle theme"
         aria-label="Toggle theme"
-        className="flex items-center justify-center text-muted hover:text-accent"
+        className="icon-button"
       >
         <Icon className="h-4 w-4" aria-hidden="true" />
       </button>

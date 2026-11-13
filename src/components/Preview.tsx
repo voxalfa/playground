@@ -97,87 +97,29 @@ function Preview(props: {
         )}
       </div>
 
-      <div className="flex h-10 shrink-0 items-center gap-2 border-t border-border px-2">
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            className="icon-button"
-            disabled={page === 0}
-            onClick={() => setCurrentPage((prev) => prev - 1)}
-            aria-label="Previous page"
+      <div className="flex h-auto shrink-0 flex-col gap-1 border-t border-border px-2 py-1 sm:h-10 sm:flex-row sm:items-center sm:gap-2 sm:py-0">
+        <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:flex-1">
+          <Slider.Root
+            className="relative flex h-10 min-w-0 flex-1 items-center data-[disabled]:opacity-40 sm:h-4"
+            min={0}
+            max={Math.max(playback.duration, 0.01)}
+            step={0.1}
+            value={[Math.min(playback.position, playback.duration)]}
+            onValueChange={([value]) => playback.seek(value)}
+            disabled={playback.duration === 0}
           >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-
-          <span className="min-w-12 text-center text-xs tabular-nums text-muted">
-            {pageCount > 0 ? `${page + 1} / ${pageCount}` : "0 / 0"}
-          </span>
-
-          <button
-            type="button"
-            className="icon-button"
-            disabled={pageCount <= 1 || page >= pageCount - 1}
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-            aria-label="Next page"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-
-        <Slider.Root
-          className="relative flex h-4 min-w-0 flex-1 items-center data-[disabled]:opacity-40"
-          min={0}
-          max={Math.max(playback.duration, 0.01)}
-          step={0.1}
-          value={[Math.min(playback.position, playback.duration)]}
-          onValueChange={([value]) => playback.seek(value)}
-          disabled={playback.duration === 0}
-        >
-          <Slider.Track className="relative h-1 grow rounded-full bg-border">
-            <Slider.Range className="absolute h-full rounded-full bg-accent" />
-          </Slider.Track>
-          <Slider.Thumb
-            aria-label="Seek"
-            className="block h-3 w-3 rounded-full bg-accent"
-          />
-        </Slider.Root>
-
-        <span className="shrink-0 text-xs tabular-nums text-muted">
-          {formatTime(playback.position)} / {formatTime(playback.duration)}
-        </span>
-
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            className="icon-button"
-            disabled={zoom <= ZOOM_MIN}
-            onClick={() =>
-              setZoom((prev) => Math.max(prev - ZOOM_STEP, ZOOM_MIN))
-            }
-            aria-label="Zoom out"
-          >
-            <ZoomOut className="h-4 w-4" />
-          </button>
-
-          <span className="min-w-10 text-center text-xs tabular-nums text-muted">
-            {Math.round(zoom * 100)}%
-          </span>
+            <Slider.Track className="relative h-1 grow rounded-full bg-border">
+              <Slider.Range className="absolute h-full rounded-full bg-accent" />
+            </Slider.Track>
+            <Slider.Thumb
+              aria-label="Seek"
+              className="relative block h-3 w-3 rounded-full bg-accent before:absolute before:-inset-3 before:content-[''] sm:before:-inset-2"
+            />
+          </Slider.Root>
 
           <button
             type="button"
-            className="icon-button"
-            disabled={zoom >= ZOOM_MAX}
-            onClick={() =>
-              setZoom((prev) => Math.min(prev + ZOOM_STEP, ZOOM_MAX))
-            }
-            aria-label="Zoom in"
-          >
-            <ZoomIn className="h-4 w-4" />
-          </button>
-
-          <button
-            type="button"
-            className="icon-button"
+            className="icon-button shrink-0"
             aria-label={playback.playing ? "Pause" : "Play"}
             disabled={playback.duration === 0}
             onClick={() => void playback.toggle()}
@@ -188,6 +130,68 @@ function Preview(props: {
               <Play className="h-4 w-4" />
             )}
           </button>
+
+          <span className="shrink-0 text-xs tabular-nums text-muted">
+            {formatTime(playback.position)} / {formatTime(playback.duration)}
+          </span>
+        </div>
+
+        <div className="flex w-full items-center justify-center gap-2 sm:w-auto sm:shrink-0 sm:justify-end">
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="icon-button"
+              disabled={page === 0}
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+
+            <span className="min-w-12 text-center text-xs tabular-nums text-muted">
+              {pageCount > 0 ? `${page + 1} / ${pageCount}` : "0 / 0"}
+            </span>
+
+            <button
+              type="button"
+              className="icon-button"
+              disabled={pageCount <= 1 || page >= pageCount - 1}
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              aria-label="Next page"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="icon-button"
+              disabled={zoom <= ZOOM_MIN}
+              onClick={() =>
+                setZoom((prev) => Math.max(prev - ZOOM_STEP, ZOOM_MIN))
+              }
+              aria-label="Zoom out"
+            >
+              <ZoomOut className="h-4 w-4" />
+            </button>
+
+            <span className="min-w-10 text-center text-xs tabular-nums text-muted">
+              {Math.round(zoom * 100)}%
+            </span>
+
+            <button
+              type="button"
+              className="icon-button"
+              disabled={zoom >= ZOOM_MAX}
+              onClick={() =>
+                setZoom((prev) => Math.min(prev + ZOOM_STEP, ZOOM_MAX))
+              }
+              aria-label="Zoom in"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </button>
+          </div>
 
           <DownloadMenu midi={midi} svgPages={svgPages} page={page} />
         </div>
