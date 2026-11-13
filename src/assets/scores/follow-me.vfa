@@ -12,7 +12,7 @@
 ;
 ;  Use the button on the navbar to toggle the preview
 ;
-;  NOTE: Custom fonts do not work in the browser
+;  NOTE: Custom fonts and PDF export are not supported in the playground
 
 [#] title="Follow me"
 [#] author="Daniel Batchellor"
