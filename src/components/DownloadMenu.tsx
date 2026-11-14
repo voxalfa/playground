@@ -1,8 +1,10 @@
+import { Fragment } from "react";
 import { Download, FileImage, FileMusic } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { useTheme } from "../context/theme";
 import { downloadBlob } from "../lib/download";
+import { MenuItem } from "./MenuItem";
 
 interface DownloadMenuProps {
   midi: Uint8Array | null;
@@ -26,6 +28,23 @@ function DownloadMenu({ midi, svgPages, page }: DownloadMenuProps) {
     }
   };
 
+  const items = [
+    {
+      id: "midi",
+      label: "Download MIDI (.mid)",
+      icon: FileMusic,
+      disabled: midi === null,
+      onSelect: downloadMidi,
+    },
+    {
+      id: "svg",
+      label: "Download SVG (.svg)",
+      icon: FileImage,
+      disabled: svg === null,
+      onSelect: downloadSvg,
+    },
+  ];
+
   return (
     <Tooltip.Provider delayDuration={300}>
       <DropdownMenu.Root>
@@ -34,7 +53,7 @@ function DownloadMenu({ midi, svgPages, page }: DownloadMenuProps) {
             <DropdownMenu.Trigger asChild>
               <button
                 type="button"
-                className="icon-button"
+                className="icon-button focus:outline-none"
                 aria-label="Download"
                 disabled={midi === null && svg === null}
               >
@@ -62,25 +81,16 @@ function DownloadMenu({ midi, svgPages, page }: DownloadMenuProps) {
             side="top"
             align="end"
             sideOffset={6}
-            className="z-50 min-w-36 border border-border bg-surface shadow-xs"
+            className="z-50 min-w-48 border border-border bg-surface shadow-xs"
           >
-            <DropdownMenu.Item
-              disabled={midi === null}
-              onSelect={downloadMidi}
-              className="flex cursor-default items-center gap-2 px-2 py-1.5 text-xs text-foreground outline-none data-[disabled]:opacity-40 data-[highlighted]:bg-background"
-            >
-              <FileMusic className="h-4 w-4" />
-              MIDI (.mid)
-            </DropdownMenu.Item>
-
-            <DropdownMenu.Item
-              disabled={svg === null}
-              onSelect={downloadSvg}
-              className="flex cursor-default items-center gap-2 px-2 py-1.5 text-xs text-foreground outline-none data-[disabled]:opacity-40 data-[highlighted]:bg-background"
-            >
-              <FileImage className="h-4 w-4" />
-              SVG (.svg)
-            </DropdownMenu.Item>
+            {items.map(({ id, ...item }, index) => (
+              <Fragment key={id}>
+                <MenuItem {...item} />
+                {index < items.length - 1 && (
+                  <DropdownMenu.Separator className="border-t border-border" />
+                )}
+              </Fragment>
+            ))}
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>

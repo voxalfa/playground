@@ -2,8 +2,8 @@ import { basicSetup } from "codemirror";
 import { lintGutter } from "@codemirror/lint";
 import { LSPClient, LSPPlugin } from "@codemirror/lsp-client";
 import { Compartment, EditorState } from "@codemirror/state";
-import { EditorView } from "@codemirror/view";
-import { useEffect, useRef } from "react";
+import { EditorView, keymap } from "@codemirror/view";
+import { useEffect, useRef, type RefObject } from "react";
 import { createEditorTheme, type ThemeMode } from "./theme";
 import {
   diagnosticsField,
@@ -18,6 +18,7 @@ import {
   FILE_URI,
   LANGUAGE_ID,
 } from "./lsp";
+import { customKeymaps } from "./keymap";
 
 const themeCompartment = new Compartment();
 const fontSizeCompartment = new Compartment();
@@ -29,13 +30,14 @@ interface CodeEditorProps {
   initialText: string;
   mode: ThemeMode;
   isMobile: boolean;
+  viewRef: RefObject<EditorView | null>;
   onTextChange: (text: string) => void;
   onDiagnostics: (diagnostics: PreviewDiagnostics) => void;
 }
 
 function CodeEditor(props: CodeEditorProps) {
+  const { viewRef } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const viewRef = useRef<EditorView | null>(null);
 
   const callbacksRef = useRef({
     onTextChange: props.onTextChange,
@@ -97,6 +99,7 @@ function CodeEditor(props: CodeEditorProps) {
             fontSizeCompartment.of(fontSizeTheme(isMobile ? 13 : 15)),
             diagnosticsField,
             client.plugin(FILE_URI, LANGUAGE_ID),
+            keymap.of(customKeymaps),
             EditorView.updateListener.of((update) => {
               if (update.docChanged) {
                 callbacksRef.current.onTextChange(update.state.doc.toString());
@@ -128,13 +131,13 @@ function CodeEditor(props: CodeEditorProps) {
       disposeTransport?.();
       viewRef.current = null;
     };
-  }, []);
+  }, [viewRef]);
 
   useEffect(() => {
     viewRef.current?.dispatch({
       effects: themeCompartment.reconfigure(createEditorTheme(props.mode)),
     });
-  }, [props.mode]);
+  }, [props.mode, viewRef]);
 
   useEffect(() => {
     viewRef.current?.dispatch({
@@ -142,7 +145,7 @@ function CodeEditor(props: CodeEditorProps) {
         fontSizeTheme(props.isMobile ? 13 : 15),
       ),
     });
-  }, [props.isMobile]);
+  }, [props.isMobile, viewRef]);
 
   return (
     <div

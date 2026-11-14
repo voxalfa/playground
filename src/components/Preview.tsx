@@ -47,8 +47,8 @@ function Preview(props: {
       try {
         setSvgPages(renderSVG(props.editorText).map(sanitizeSvg));
         setMidi(createMIDI(props.editorText));
-      } catch (error) {
-        console.error("Failed to render score", error);
+      } catch (_error) {
+        // Delegate error reporting to LSP
         setSvgPages([]);
         setMidi(null);
       }
@@ -119,7 +119,7 @@ function Preview(props: {
         )}
       </div>
 
-      <div className="flex h-auto shrink-0 flex-col gap-1 border-t border-border px-2 py-1 sm:h-10 sm:flex-row sm:items-center sm:gap-2 sm:py-0">
+      <div className="flex h-auto shrink-0 flex-col gap-1 border-t border-border px-2 py-2.5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:flex-1">
           <Slider.Root
             className="relative flex h-10 min-w-0 flex-1 items-center data-[disabled]:opacity-40 sm:h-4"
