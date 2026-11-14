@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { ThemeMode } from "../../config/theme";
+import type { ThemeMode } from "../../editor/theme";
 
 interface ThemeContextValue {
   mode: ThemeMode;

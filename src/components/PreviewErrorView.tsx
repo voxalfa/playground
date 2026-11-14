@@ -1,5 +1,5 @@
 import { TriangleAlert } from "lucide-react";
-import type { PreviewError } from "../hooks/useDiagnostics";
+import type { PreviewError } from "../editor/diagnostics";
 
 interface PreviewErrorViewProps {
   title: string;

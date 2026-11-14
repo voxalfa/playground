@@ -14,21 +14,26 @@
     "build:wasm": "npm run build:wasm-lsp && npm run build:wasm-lib"
   },
   "dependencies": {
-    "@codingame/monaco-vscode-editor-api": "^37.6.1",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/lint": "^6.9.8",
+    "@codemirror/lsp-client": "^6.3.0",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "@lezer/highlight": "^1.2.5",
     "@radix-ui/react-dropdown-menu": "^2.2.1",
     "@radix-ui/react-slider": "^1.6.1",
     "@radix-ui/react-tooltip": "^1.4.1",
     "@tailwindcss/vite": "^4.3.5",
     "@tonejs/midi": "^2.0.28",
-    "@typefox/monaco-editor-react": "^8.0.3",
+    "codemirror": "^6.0.2",
     "lucide-react": "^1.72.0",
-    "monaco-languageclient": "^11.0.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "tailwindcss": "^4.3.5",
     "tone": "^15.1.22",
     "voxalfa-lib": "file:wasm/voxalfa-lib",
-    "voxalfa-lsp": "file:wasm/voxalfa-lsp"
+    "voxalfa-lsp": "file:wasm/voxalfa-lsp",
+    "vscode-languageserver-protocol": "^3.18.5"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",

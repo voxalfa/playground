@@ -1,14 +1,13 @@
 import init, { WasmTransport } from "voxalfa-lsp";
 
 let transport: WasmTransport | undefined;
-const pendingMessages: unknown[] = [];
+const pendingMessages: string[] = [];
 
-const handleMessage = (data: unknown) => {
-  // console.log("received message", data);
-  transport?.process(JSON.stringify(data));
+const handleMessage = (message: string) => {
+  transport?.process(message);
 };
 
-self.onmessage = (event: MessageEvent) => {
+self.onmessage = (event: MessageEvent<string>) => {
   if (transport) {
     handleMessage(event.data);
   } else {
@@ -21,12 +20,11 @@ init()
     console.log("WASM module loaded");
 
     transport = new WasmTransport((message: string) => {
-      // console.debug("posting message", message);
-      return self.postMessage(JSON.parse(message));
+      self.postMessage(message);
     });
 
-    for (const data of pendingMessages.splice(0)) {
-      handleMessage(data);
+    for (const message of pendingMessages.splice(0)) {
+      handleMessage(message);
     }
   })
   .catch((error) => {

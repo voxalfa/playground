@@ -37,4 +37,13 @@
   .icon-button {
     @apply cursor-pointer grid h-7 w-7 place-items-center rounded text-muted hover:text-accent disabled:pointer-events-none disabled:opacity-40;
   }
+
+  .editor-host .cm-editor {
+    height: 100%;
+  }
+}
+
+/* swap gutter and line number */
+.editor-host .cm-gutters-before .cm-gutter-lint {
+  order: -1;
 }

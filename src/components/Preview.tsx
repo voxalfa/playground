@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import * as Slider from "@radix-ui/react-slider";
-import { useDiagnostics } from "../hooks/useDiagnostics";
+import type { PreviewError } from "../editor/diagnostics";
 import { usePlayback } from "../hooks/usePlayback";
 import { PreviewErrorView } from "./PreviewErrorView";
 import { DownloadMenu } from "./DownloadMenu";
@@ -26,10 +26,11 @@ function formatTime(seconds: number) {
 
 function Preview(props: {
   editorText: string;
+  errors: PreviewError[];
+  diagnosticsReady: boolean;
   wasmLoaded: boolean;
-  apiReady: boolean;
 }) {
-  const { errors } = useDiagnostics(props.apiReady, props.editorText);
+  const errors = props.errors;
   const [svgPages, setSvgPages] = useState<string[] | null>(null);
   const [midi, setMidi] = useState<Uint8Array | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -38,17 +39,28 @@ function Preview(props: {
   const svgRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!props.wasmLoaded || errors.length) {
+    if (!props.wasmLoaded || !props.diagnosticsReady || errors.length) {
       return;
     }
 
     const timeout = window.setTimeout(() => {
-      setSvgPages(renderSVG(props.editorText).map(sanitizeSvg));
-      setMidi(createMIDI(props.editorText));
+      try {
+        setSvgPages(renderSVG(props.editorText).map(sanitizeSvg));
+        setMidi(createMIDI(props.editorText));
+      } catch (error) {
+        console.error("Failed to render score", error);
+        setSvgPages([]);
+        setMidi(null);
+      }
     }, 200);
 
     return () => window.clearTimeout(timeout);
-  }, [props.editorText, props.wasmLoaded, errors.length]);
+  }, [
+    props.editorText,
+    props.wasmLoaded,
+    props.diagnosticsReady,
+    errors.length,
+  ]);
 
   const pageCount = svgPages?.length ?? 0;
   const page = Math.min(currentPage, Math.max(pageCount - 1, 0));
@@ -59,20 +71,29 @@ function Preview(props: {
     }
   }, [svgPages, page]);
 
+  const isWaitingForDiagnostics =
+    props.wasmLoaded && !props.diagnosticsReady && svgPages === null;
   const isRendering =
-    props.wasmLoaded && errors.length === 0 && svgPages === null;
+    props.wasmLoaded &&
+    props.diagnosticsReady &&
+    errors.length === 0 &&
+    svgPages === null;
 
   return (
     <aside className="flex h-full w-[40%] shrink-0 flex-col border-l border-border bg-surface max-md:absolute max-md:inset-0 max-md:z-20 max-md:w-full">
       <div className="min-h-0 flex-1 overflow-auto">
-        {!props.wasmLoaded || isRendering ? (
+        {!props.wasmLoaded || isWaitingForDiagnostics || isRendering ? (
           <div
             key="loading"
             className="flex h-full flex-col items-center justify-center gap-3"
           >
             <LoaderCircle className="h-5 w-5 animate-spin text-accent" />
             <p className="text-xs text-muted">
-              {props.wasmLoaded ? "Rendering score…" : "Loading modules…"}
+              {!props.wasmLoaded
+                ? "Loading modules…"
+                : isWaitingForDiagnostics
+                  ? "Checking score…"
+                  : "Rendering score…"}
             </p>
           </div>
         ) : errors.length > 0 ? (

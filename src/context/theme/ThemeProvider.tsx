@@ -5,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { ThemeMode } from "../../config/theme";
+import type { ThemeMode } from "../../editor/theme";
 import { ThemeContext } from ".";
 
 const THEME_STORAGE_KEY = "voxalfa-theme";

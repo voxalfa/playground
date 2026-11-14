@@ -6,9 +6,8 @@
 ;  Docs    https://voxalfa.github.io/documentation/
 ;
 ;  Shortcuts
-;    - F1            Command palette
-;    - Ctrl+Shift+I  Format file
-;    - Ctrl+Shift+R  Refactor
+;    - Shift+Alt+F   Format file
+;    - Ctrl+F        Find and replace
 ;
 ;  Use the button on the navbar to toggle the preview
 ;
