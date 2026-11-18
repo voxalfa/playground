@@ -73,6 +73,7 @@ function Preview(props: {
 
   const isWaitingForDiagnostics =
     props.wasmLoaded && !props.diagnosticsReady && svgPages === null;
+
   const isRendering =
     props.wasmLoaded &&
     props.diagnosticsReady &&

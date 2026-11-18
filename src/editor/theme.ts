@@ -65,6 +65,13 @@ function createEditorTheme(mode: ThemeMode): Extension {
         ".cm-cursor, .cm-dropCursor": {
           borderLeftColor: palette.accent,
         },
+        ".cm-selectionLayer .cm-selectionBackground": {
+          backgroundColor: opacity(palette.accent, 0.18),
+        },
+        "&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground":
+          {
+            backgroundColor: opacity(palette.accent, 0.3),
+          },
         ".cm-activeLine": {
           backgroundColor: opacity(palette.surface, 0.6),
         },
@@ -122,15 +129,31 @@ function createEditorTheme(mode: ThemeMode): Extension {
           backgroundColor: palette.surface,
           color: palette.foreground,
         },
-        ".cm-button": {
-          backgroundColor: palette.background,
-          color: palette.foreground,
-          borderColor: palette.border,
+        ".cm-panel.cm-search": {
+          padding: "6px 8px",
         },
-        ".cm-textfield": {
+        ".cm-panels .cm-textfield": {
           backgroundColor: palette.background,
           color: palette.foreground,
-          borderColor: palette.border,
+          border: `1px solid ${palette.border}`,
+          borderRadius: "4px",
+          padding: "3px 6px",
+          outline: "none",
+        },
+        ".cm-panels .cm-textfield:focus": {
+          borderColor: palette.accent,
+        },
+        ".cm-panels .cm-button": {
+          backgroundImage: "none",
+          backgroundColor: palette.background,
+          color: palette.foreground,
+          border: `1px solid ${palette.border}`,
+          borderRadius: "4px",
+          padding: "3px 8px",
+          cursor: "pointer",
+        },
+        ".cm-panels input[type=checkbox]": {
+          accentColor: palette.accent,
         },
         ".cm-foldPlaceholder": {
           backgroundColor: palette.surface,

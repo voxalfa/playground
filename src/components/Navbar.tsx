@@ -87,11 +87,7 @@ function Navbar(props: {
 
   return (
     <header className="flex py-3 px-4 gap-3 items-center justify-between border-b border-border bg-surface">
-      <img src={logo} alt="Voxalfa" className="h-7 w-7 rounded-md" />
-
-      <span className="font-serif text-xl leading-none tracking-tight text-foreground">
-        <span className="text-accent">V</span>oxalfa
-      </span>
+      <img src={logo} alt="Voxalfa" className="h-6.5 w-6.5 rounded-md" />
 
       <button
         type="button"

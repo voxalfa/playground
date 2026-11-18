@@ -30,10 +30,6 @@ const diagnosticsField = StateField.define<PreviewDiagnostics>({
   },
 });
 
-/**
- * Capture the LSP diagnostics before the CodeMirror handler turns them into
- * editor markers. Returning `false` lets that handler still update the editor.
- */
 function captureDiagnostics(
   client: LSPClient,
   params: PublishDiagnosticsParams,

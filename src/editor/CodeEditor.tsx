@@ -2,7 +2,7 @@ import { basicSetup } from "codemirror";
 import { lintGutter } from "@codemirror/lint";
 import { LSPClient, LSPPlugin } from "@codemirror/lsp-client";
 import { Compartment, EditorState } from "@codemirror/state";
-import { EditorView, keymap } from "@codemirror/view";
+import { EditorView } from "@codemirror/view";
 import { useEffect, useRef, type RefObject } from "react";
 import { createEditorTheme, type ThemeMode } from "./theme";
 import {
@@ -91,6 +91,7 @@ function CodeEditor(props: CodeEditorProps) {
         state: EditorState.create({
           doc: initialText,
           extensions: [
+            customKeymaps,
             basicSetup,
             voxalfaLanguage,
             linkExtension,
@@ -99,7 +100,6 @@ function CodeEditor(props: CodeEditorProps) {
             fontSizeCompartment.of(fontSizeTheme(isMobile ? 13 : 15)),
             diagnosticsField,
             client.plugin(FILE_URI, LANGUAGE_ID),
-            keymap.of(customKeymaps),
             EditorView.updateListener.of((update) => {
               if (update.docChanged) {
                 callbacksRef.current.onTextChange(update.state.doc.toString());

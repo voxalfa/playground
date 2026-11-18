@@ -1,7 +1,13 @@
-import type { KeyBinding } from "@codemirror/view";
+import { Prec } from "@codemirror/state";
+import { keymap, type KeyBinding } from "@codemirror/view";
+import {
+  acceptCompletion,
+  hasNextSnippetField,
+  nextSnippetField,
+} from "@codemirror/autocomplete";
 import { downloadBlob } from "../lib/download";
 
-const customKeymaps: KeyBinding[] = [
+const keys: KeyBinding[] = [
   {
     key: "Mod-s",
     run: (view) => {
@@ -11,6 +17,14 @@ const customKeymaps: KeyBinding[] = [
     },
     preventDefault: true,
   },
+  {
+    key: "Enter",
+    run: (view) =>
+      acceptCompletion(view) ||
+      (hasNextSnippetField(view.state) && nextSnippetField(view)),
+  },
 ];
+
+const customKeymaps = Prec.highest(keymap.of(keys));
 
 export { customKeymaps };
