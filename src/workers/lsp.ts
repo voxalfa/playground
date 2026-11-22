@@ -17,7 +17,9 @@ self.onmessage = (event: MessageEvent<string>) => {
 
 init()
   .then(() => {
-    console.log("WASM module loaded");
+    console.log("worker: WASM module loaded");
+
+    self.postMessage({ status: "loaded" });
 
     transport = new WasmTransport((message: string) => {
       self.postMessage(message);

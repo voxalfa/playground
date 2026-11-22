@@ -23,10 +23,23 @@ interface WorkerTransport {
   dispose: () => void;
 }
 
-function createWorkerTransport(): WorkerTransport {
+async function createWorkerTransport(): Promise<WorkerTransport> {
   const worker = new LspWorker();
   const handlers = new Set<(message: string) => void>();
   let disposed = false;
+
+  const wasmLoaded = new Promise<void>((resolve, _reject) => {
+    const cb = (event: MessageEvent<{ status: string }> | undefined) => {
+      if (event?.data && event.data.status === "loaded") {
+        worker.removeEventListener("message", cb);
+        return resolve();
+      }
+    };
+
+    worker.addEventListener("message", cb);
+  });
+
+  await wasmLoaded;
 
   worker.addEventListener("message", (event: MessageEvent<string>) => {
     for (const handler of handlers) {
